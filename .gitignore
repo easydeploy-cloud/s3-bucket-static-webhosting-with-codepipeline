@@ -8,6 +8,8 @@ node_modules/
 dist/
 .terraform*
 *tfstate*
+*tfvars
+.infracost/
 # Compiled Java class files
 *.class
 
