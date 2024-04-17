@@ -1,19 +1,29 @@
 resource "aws_s3_bucket" "app_bucket" {
-  bucket = var.app_bucket_name
-  #acl = "public-read"
+  bucket        = var.app_bucket_name
+  force_destroy = true
 
-  website {
-    index_document = "index.html"
-    error_document = "index.html"
-  }
+}
+
+resource "aws_s3_bucket_cors_configuration" "app_bucket" {
+  bucket = aws_s3_bucket.app_bucket.id
 
   cors_rule {
     allowed_methods = ["GET"]
     allowed_origins = ["*"]
     allowed_headers = ["*"]
   }
-  force_destroy = true
+}
 
+resource "aws_s3_bucket_website_configuration" "app_bucket" {
+  bucket = aws_s3_bucket.app_bucket.id
+
+  index_document {
+    suffix = "index.html"
+  }
+
+  error_document {
+    key = "index.html"
+  }
 }
 
 resource "aws_s3_bucket_public_access_block" "this" {
